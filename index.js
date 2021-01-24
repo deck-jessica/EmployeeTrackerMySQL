@@ -17,12 +17,6 @@ var connection = mysql.createConnection({
   database: "company_db"
 });
 
-// connect to the mysql server and sql database
-//connection.connect(function(err) {
-  //if (err) throw err;
-  // run the start function after the connection is made to prompt the user
- // start();
-//});
 
 connection.connect(function(err) {
     if (err) throw err;
@@ -82,7 +76,9 @@ connection.connect(function(err) {
   function buildDept () {
     inquirer
     .prompt({
-        name: "newDepartment", type: "input", message: "Enter Name for New Department.",
+        name: "newDepartment", 
+        type: "input", 
+        message: "Enter Name for New Department.",
         validate: (input) => {
             if ( !input ) { return 'Must enter an answer.'; }
             return true;
@@ -90,7 +86,8 @@ connection.connect(function(err) {
     })
     .then(response => {
         connection.query("INSERT INTO department SET ?",
-        { name: response.newDepartment },
+        {   id: response.id,
+            deptName: response.newDepartment },
         (err, res) => {
             if (err) throw err;
             console.log(`${response.newDepartment} department added.`);
@@ -133,5 +130,72 @@ function buildRole () {
             console.log(`${response.roleName} has been added.`);
             runSearch();
         });
+    });
+};
+
+function buildEmployee () {
+    inquirer
+    .prompt([
+        {
+            name: "firstName", 
+            type: "input", 
+            message: "Enter the employee's first name.",
+            },
+        {
+            name: "lastName", 
+            type: "input", 
+            message: "Enter the employee's last name.",
+            },
+        
+        {
+            name: "roleId", 
+            type: "input", 
+            message: "Enter employee's role.", 
+        },
+
+        {
+            name: "managerId", 
+            type: "list", 
+            message: "Choose employee's manager.", 
+            choices: [ 1, 2, 3, 4, 5]
+        }
+    ])
+    .then(response => {
+        connection.query("INSERT INTO employee SET ?",
+        {   id: response.id,
+            firstName: response.firstName,
+            lastName: response.lastName,
+            roleId: response.roleId,
+            manager_id: response.managerId
+        },
+        (err, res) => {
+            if (err) throw err;
+            console.log(`${response.firstName} ${response.lastName} has been added as a new employee.`);
+            runSearch();
+        });
+    });
+};
+
+function viewDepts  ()  {
+    connection.query(`SELECT * FROM department`, (err, res) => {
+      if (err) throw err; 
+      console.table(res); 
+      runSearch();
+    });
+};
+
+function viewRoles () {
+    connection.query(`SELECT * FROM role`, (err, res) => {
+      if (err) throw err; 
+      console.table(res); 
+      runSearch();
+    });
+};
+
+function viewEmployees () {
+    connection.query(`SELECT * FROM employee`, (err, res) => {
+      if (err) throw err; 
+      console.table(res); 
+      runSearch();
     });
 };
