@@ -97,6 +97,15 @@ connection.connect(function(err) {
 };
 
 function buildRole () {
+
+    var deptNameList;
+
+    connection.query(`SELECT * FROM department`, (err, res) => {
+        if (err) throw err; 
+        deptNameList = res.map(department => department.deptName); 
+       
+      });
+
     inquirer
     .prompt([
         {
@@ -112,28 +121,49 @@ function buildRole () {
         },
 
         {
-            name: "deptId", 
+            name: "deptName", 
             type: "list", 
-            message: "Choose department ID number for new role title.", 
-            choices: [ 1, 2, 3, 4, 5]
+            message: "Choose department name for new role title.", 
+            choices: function (){
+                return deptNameList;
+            }
         }
     ])
     .then(response => {
+
+        var deptId;
+    connection.query(`SELECT * FROM department WHERE deptName = ?`,response.deptName, (err, res) => {
+        if (err) throw err; 
+        
+        deptId = res[0].id; 
+
         connection.query("INSERT INTO role SET ?",
         {
             title: response.roleName,
             salary: parseInt(response.roleSalary),
-            department_id: response.deptId
+            department_id: parseInt(deptId)
         },
         (err, res) => {
             if (err) throw err;
             console.log(`${response.roleName} has been added.`);
             runSearch();
         });
+       
+      });
+
+       
     });
 };
 
 function buildEmployee () {
+    var roleList;
+
+    connection.query(`SELECT * FROM role`, (err, res) => {
+        if (err) throw err; 
+        roleList = res.map(role => role.title); 
+       
+      });
+
     inquirer
     .prompt([
         {
@@ -148,9 +178,12 @@ function buildEmployee () {
             },
         
         {
-            name: "roleId", 
-            type: "input", 
-            message: "Enter employee's role.", 
+            name: "roleName", 
+            type: "list", 
+            message: "Choose employee's role.", 
+            choices: function (){
+                return roleList;
+            }
         },
 
         {
@@ -161,12 +194,17 @@ function buildEmployee () {
         }
     ])
     .then(response => {
+        var roleId;
+    connection.query(`SELECT * FROM role WHERE title = ?`, response.roleName, (err, res) => {
+        if (err) throw err; 
+        
+         roleId = res[0].id; 
         connection.query("INSERT INTO employee SET ?",
         {   id: response.id,
             firstName: response.firstName,
             lastName: response.lastName,
-            roleId: response.roleId,
-            manager_id: response.managerId
+            roleId: parseInt(roleId),
+            managerId: response.managerId
         },
         (err, res) => {
             if (err) throw err;
@@ -174,6 +212,7 @@ function buildEmployee () {
             runSearch();
         });
     });
+})
 };
 
 function viewDepts  ()  {
@@ -199,3 +238,42 @@ function viewEmployees () {
       runSearch();
     });
 };
+/*
+function updateEmployee () {
+    connection.query(`
+    SELECT id, firstName, lastName
+    FROM employee`,
+    (err, res) => {
+        if (err) throw err;
+        inquirer
+        .prompt([
+            {
+                name: "employeeId",
+                type: "input",
+                message: "Enter the Employee ID number to be updated to new role.",
+
+            },
+            
+            {
+                name: "updatedRoleId",
+                type: "input",
+                message: "Enter new role ID number for the selected employee.",
+
+            },
+        ])
+        .then(response => {
+            var updatedEmployeeRole = parseInt(response.employeeId);
+            var updatedRoleId = parseInt(response.updatedRoleId);
+            connection.query(`UPDATE employee SET roleId = ${updatedRoleId} WHERE id = ${updatedEmployeeRole}`,
+            (err, res) => {
+                if (err) {
+                    console.log('Must enter valid ID. Please try again.');
+                    updateEmployee();
+                    return;
+                }
+                console.log(`Role associated with employee properly updated.`);
+                runSearch();
+            });
+        });
+    });
+}; */
