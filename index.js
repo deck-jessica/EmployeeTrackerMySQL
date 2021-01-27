@@ -238,26 +238,38 @@ function viewEmployees () {
       runSearch();
     });
 };
-/*
+
 function updateEmployee () {
-    connection.query(`
-    SELECT id, firstName, lastName
-    FROM employee`,
-    (err, res) => {
+    var employeeList;
+    connection.query(`SELECT firstName, lastName FROM employee`,(err, res) => {
         if (err) throw err;
-        inquirer
+        employeeList = res.map(employee => {employee.firstName + " " + employee.lastName});
+    });
+    var roleList;
+    connection.query(`SELECT * FROM role`, (err, res) => {
+        if (err) throw err; 
+        roleList = res.map(role => role.title); 
+      });
+
+    inquirer
         .prompt([
             {
                 name: "employeeId",
-                type: "input",
-                message: "Enter the Employee ID number to be updated to new role.",
+                type: "list",
+                message: "Select the employee you would like to update.",
+                choices: function () {
+                    return employeeList;
+                }
 
             },
             
             {
-                name: "updatedRoleId",
-                type: "input",
-                message: "Enter new role ID number for the selected employee.",
+                name: "roleName", 
+                type: "list", 
+                message: "Choose employee's new role.", 
+                choices: function (){
+                    return roleList;
+                }
 
             },
         ])
@@ -276,4 +288,4 @@ function updateEmployee () {
             });
         });
     });
-}; */
+}; 
