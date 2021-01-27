@@ -6,9 +6,11 @@ This is a command line application that will allow users to access employee info
 
 [GitHub Link to repo](https://github.com/deck-jessica/EmployeeTrackerMySQL)
 
-[Demo video](...)
+[Demo video](https://drive.google.com/file/d/1mGGgxQr3LDZjj2tSRPZ0kFplxB_BB1ei/view)
 
-![Demo console.table view](/images/screenshotdemopage.png)
+![Demo console.table view](/images/viewdepts.jpg)
+
+![Demo add view](/images/addemp.jpg)
 
  ## Table of Contents
 
