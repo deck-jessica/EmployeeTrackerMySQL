@@ -287,5 +287,4 @@ function updateEmployee () {
                 runSearch();
             });
         });
-    });
-}; 
+    }

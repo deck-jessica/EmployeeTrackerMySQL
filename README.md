@@ -4,11 +4,11 @@
 
 This is a command line application that will allow users to access employee information for their entire company. This information is stored in a mySQL database, and accessed using queries to the database.
 
-[GitHub Link to repo](https://drive.google.com/file/d/1F5nKVIAQ5wTZPbYdis90Nugyp6QNgmEs/view)
+[GitHub Link to repo](https://github.com/deck-jessica/EmployeeTrackerMySQL)
 
 [Demo video](https://drive.google.com/file/d/1F5nKVIAQ5wTZPbYdis90Nugyp6QNgmEs/view)
 
-![Demo generated readme](/Develop/utils/screenshotdemopage.png)
+![Demo console.table view](/Develop/utils/screenshotdemopage.png)
 
  ## Table of Contents
 
