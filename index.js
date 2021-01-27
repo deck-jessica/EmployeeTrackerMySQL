@@ -13,7 +13,7 @@ var connection = mysql.createConnection({
   user: "root",
 
   // Your password
-  password: "V@nce103",
+  password: "",
   database: "company_db"
 });
 
@@ -241,10 +241,11 @@ function viewEmployees () {
 
 function updateEmployee () {
     var employeeList;
-    connection.query(`SELECT firstName, lastName FROM employee`,(err, res) => {
+    var empChoice = connection.query(`SELECT * FROM employee`, (err, res) => {
         if (err) throw err;
-        employeeList = res.map(employee => {employee.firstName + " " + employee.lastName});
+        employeeList = empChoice.map((employee) => {employee.firstName + " " + employee.lastName});
     });
+    
     var roleList;
     connection.query(`SELECT * FROM role`, (err, res) => {
         if (err) throw err; 

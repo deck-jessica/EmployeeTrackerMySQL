@@ -1,3 +1,5 @@
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '';
+
 DROP DATABASE IF EXISTS company_db;
 
 CREATE DATABASE company_db;
